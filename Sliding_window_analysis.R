@@ -6,8 +6,8 @@ library(tidyr)
 library(RColorBrewer)
 
 #  ID thresholds for each stress
-density_thresholds<-read.csv("~/Documents/Broad_spectrum_clusters/Raw_data/Density_percentage.csv")
-consec_thresholds<-read.csv("~/Documents/Broad_spectrum_clusters/Raw_data/consecutive_percent.csv")
+density_thresholds<-read.csv("~/Documents/Orphan_ssp_hotspots/Data/Density_percentage.csv")
+consec_thresholds<-read.csv("~/Documents/Orphan_ssp_hotspots/Data/consecutive_percent.csv")
 dt<-list()
 ct<-list()
 for(i in unique(density_thresholds$Stress)){
@@ -25,6 +25,7 @@ for(i in unique(density_thresholds$Stress)){
     ct[[length(ct)+1]] = min
   }
 }
+
 for(i in unique(density_thresholds$Stress)){
   data=consec_thresholds[(consec_thresholds$Stress==i),]
   min = data[(data$percentage <=0.05),]
@@ -46,10 +47,10 @@ consec_thr<-do.call(rbind.data.frame, ct)
 # ==========================================================================================
 # This section reads in the files
 # which directory for the merged data
-setwd("~/Documents/Broad_spectrum_clusters/Raw_data/")
+setwd("~/Documents/Orphan_ssp_hotspots/")
 all <- read.csv("~/Documents/Hotspots/Paper_version_4/wheat_all.csv", header=T)
 colnames(all)<-c( "Chromosome", "start", "end", "GeneID","Score", "strand")
-expression_scores<-read.csv("~/Documents/Broad_spectrum_clusters/Raw_data/Expression_analysis/expression_scores.csv", header=T)
+expression_scores<-read.csv("~/Documents/Orphan_ssp_hotspots/Data/Wheat_SSPs.csv", header=T)
 dir.create("Gene_cluster_analysis")
 
 clusters<-function(all, expression_scores){
@@ -138,10 +139,10 @@ clusters<-function(all, expression_scores){
       ylab("Gene Density") + ggtitle(paste(d)) + theme_bw() + 
       geom_hline(yintercept=thres_d, alpha=0.7) +
       theme(text = element_text(size=16, colour="black")) + 
-      coord_cartesian(ylim=c(0,1))+
+      coord_cartesian(ylim=c(0,1.4))+
       scale_color_manual( values=c("grey60", "orangered2"))
     write.csv(df, file=paste("Gene_cluster_analysis/", d, "analysed.csv", sep="_"), row.names=F)
-    ggsave(plot, file=paste("Gene_cluster_analysis/", d, ".pdf"), width=300, height=300, unit="mm", dpi=400)
+    ggsave(plot, file=paste("Gene_cluster_analysis/", d, ".pdf"), width=400, height=300, unit="mm", dpi=400)
     
     
     
@@ -153,7 +154,7 @@ clusters<-function(all, expression_scores){
   write.csv(all_stress_together, file="Gene_cluster_analysis/all_stress_together.csv", row.names=F)
   write.csv(all_stress_hotspots, file="Gene_cluster_analysis/all_stress_hotspots.csv", row.names=F)
   all_stress_together$Hotspot<-factor(all_stress_together$Hotspot, levels=c("Not hotspot", "Hotspot"))
-  
+
 
   # ====================================================================================================
   all_stress_together_graph<-all_stress_together
@@ -166,7 +167,7 @@ clusters<-function(all, expression_scores){
         ylab("Gene Density") + ggtitle(paste(i)) + theme_bw() +
         theme(text = element_text(size=16, colour="black")) +
         scale_color_manual( values=c("grey60", "orangered2")) +
-        coord_cartesian(ylim=c(0,1.3))
+        coord_cartesian(ylim=c(0,1.2))
       ggsave(plot, file=paste("Gene_cluster_analysis/", i, "all_stress.pdf"), width=300, height=300, unit="mm", dpi=400)
     }else{
       plot<-
@@ -174,7 +175,7 @@ clusters<-function(all, expression_scores){
         ylab("Gene Density") + ggtitle(paste(i)) + theme_bw() +
         theme(text = element_text(size=16, colour="black")) +
         scale_color_manual( values=c("grey60")) +
-        coord_cartesian(ylim=c(0,1.3))
+        coord_cartesian(ylim=c(0,1.2))
       ggsave(plot, file=paste("Gene_cluster_analysis/", i, "all_stress.pdf"), width=300, height=300, unit="mm", dpi=400)
     }
   }
