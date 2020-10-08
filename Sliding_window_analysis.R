@@ -12,7 +12,7 @@ dt<-list()
 ct<-list()
 for(i in unique(density_thresholds$Stress)){
   data=density_thresholds[(density_thresholds$Stress==i),]
-  min = data[(data$percentage <=0.05),]
+  min = data[(data$percentage <=0.01),]
   if(nrow(min) > 0){
     min=as.data.frame(min(min$density))
     min$stress<-paste(i)
@@ -28,7 +28,7 @@ for(i in unique(density_thresholds$Stress)){
 
 for(i in unique(density_thresholds$Stress)){
   data=consec_thresholds[(consec_thresholds$Stress==i),]
-  min = data[(data$percentage <=0.05),]
+  min = data[(data$percentage <=0.01),]
   if(nrow(min) > 1){
     min=as.data.frame(min(min$consecutive))
     min$stress<-paste(i)
